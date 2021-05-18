@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  web:
+    image: nginx:latest
+    container_name: remylavergne-dev
+    # build: .
+    expose:
+      - 80
+    volumes: 
+      - ./public:/usr/share/nginx/html
+    environment:
+      VIRTUAL_HOST: remylavergne.dev
+      LETSENCRYPT_HOST: remylavergne.dev
+      LETSENCRYPT_EMAIL: lavergne.remy@gmail.com
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

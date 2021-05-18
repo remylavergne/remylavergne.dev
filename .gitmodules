@@ -1,0 +1,9 @@
+[submodule "themes/uBlogger"]
+	path = themes/uBlogger
+	url = https://github.com/upagge/uBlogger.git
+[submodule "dream"]
+	path = dream
+	url = https://github.com/g1eny0ung/hugo-theme-dream.git
+[submodule "themes/dream"]
+	path = themes/dream
+	url = https://github.com/g1eny0ung/hugo-theme-dream.git

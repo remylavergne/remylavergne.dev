@@ -1,0 +1,86 @@
+baseURL = "https://remylavergne.dev/"
+# [en, zh-cn, fr, ...] determines default content language
+defaultContentLanguage = "en"
+# language code
+languageCode = "en"
+title = "remylavergne.dev"
+enableRobotsTXT = true
+
+# Change the default theme to be use when building the site with Hugo
+theme = "dream"
+
+googleAnalytics = "G-01Y6RQSV2H"
+disqusShortname = "remylavergne-dev"
+
+[params]
+  background = "#fff"
+#   backgroundImage = "/me/background.jpg"
+  linkColor = "seagreen"
+
+  # dark mode
+  # defaultDark = true
+  backgroundDark = "black"
+#   backgroundImageDark = "/me/background-dark.jpg"
+  darkLinkColor = "darkseagreen"
+  # darkNav = true
+  # dark404 = true
+
+  images = [""]
+
+  author = "Rémy Lavergne"
+  description = "Random software developer"
+  avatar = "/me/mugshot.jpg"
+  headerTitle = "Rémy Lavergne"
+  motto = "Random software developer "
+  # maxTags = 5
+  # categoriesLimitInHeader = 6 # deprecated
+  # headerBottomText = "" # deprecated
+
+#   footerBottomText = "Foot text"
+
+  rss = true
+
+#   utterancesRepo = "g1eny0ung/g1eny0ung.github.io"
+
+  # valine = true
+  # LEANCLOUD_APP_ID = ""
+  # LEANCLOUD_APP_KEY = ""
+
+  email = "contact@remylavergne.dev"
+#   twitter = "g1eny0ung"
+  facebook = "reeemy"
+  instagram = "lavergne.remy"
+  # mastodon = ""
+  linkedin = "remylavergne"
+  github = "remylavergne"
+#   stackoverflow = "5676489/g1eny0ung"
+#   codepen = "g1eny0ung"
+
+  siteStartYear = 2021
+
+  favicon = "/favicon.ico"
+
+  highlightjs = true
+  # highlightjsCDN = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"
+  highlightjsExtraLanguages = ["ocaml", "kotlin"]
+  highlightjsTheme = "solarized-light"
+  highlightjsThemeDark = "solarized-dark"
+
+  # search
+  enableSearch = true
+
+  # options
+  showSummaryCoverInPost = true
+  # hasTwitterEmbed = true
+  # reversePostAndAside = true
+  # shareInAside = true
+
+#   [params.advanced]
+#     customCSS = ["css/custom.css"]
+#     customJS = []
+
+#   [params.experimental]
+#     jsDate = true
+#     jsDateFormat = "yyyy年MM月dd日"
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
