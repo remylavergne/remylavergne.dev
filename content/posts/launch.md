@@ -20,11 +20,4 @@ Lancement, ouverture, déploiement de mon site web.
 
 L'objectif m'est inconnu.
 
-Les sujets seront hétéroclites : musique, skateboard, developement logiciel, code, et programmation.
-
-
-```kotlin
-fun main(args: List<String>) {
-  println("Hello, World!")
-}
-```
+Les sujets seront hétéroclites : musique, skateboard, dévelopement logiciel, code, et programmation.

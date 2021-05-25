@@ -4,15 +4,30 @@ services:
   web:
     image: nginx:latest
     container_name: remylavergne-dev
-    # build: .
     expose:
       - 80
-    volumes: 
+    volumes:
       - ./public:/usr/share/nginx/html
     environment:
       VIRTUAL_HOST: remylavergne.dev
       LETSENCRYPT_HOST: remylavergne.dev
       LETSENCRYPT_EMAIL: lavergne.remy@gmail.com
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  auto-update:
+    build: .
+    container_name: remylavergne-dev-auto-update
+    volumes:
+      - ./public:/usr/src/app/public
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
 
 networks:
   default:
