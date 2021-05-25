@@ -17,21 +17,28 @@ tags:
 draft: false
 ---
 
-Article de test pour savoir si l'automatisation de la mise à jour de mon blog fonctionne.
+Explication de comment j'ai automatisé la mise à jour de mon blog avec **GitHub**, **Docker** et **Kotlin**.
 
 <!--more-->
 
-Ce blog est hébergé sur [GitHub](https://github.com/remylavergne/remylavergne.dev), et je voulais trouver une moyen simple de pouvoir automatiser sa mise à jour, sans devoir passer par mon SFTP pour téléverser moi-même le site. Ce process est long, et pas fun du tout.
+## Contexte et cas d'usage
 
-Je suis parti dans l'idée de faire un petit script pour automatiser ce processus. Mais comment fonctionne-t'il ?
+Ce blog est hébergé sur [GitHub](https://github.com/remylavergne/remylavergne.dev), et je voulais trouver une moyen simple de pouvoir automatiser sa mise à jour, sans devoir passer par mon ftp pour upload moi-même les fichiers générés par _Hugo_. Ce process est long, et pas fun du tout.
 
-- Le script fait un fetch du repository toutes les 30 minutes (valeur arbitraire que j'ai imposé)
-- Si une différence est détectée, un pull est effectué, et ensuite, le site est build via Hugo
-- Suite au build, tout les fichiers sont copiés dans le dossier public pour exposer le blog à jour
+## Processus
 
-Pour cela, j'ai créé une image [Docker](https://github.com/remylavergne/remylavergne.dev/blob/master/Dockerfile) (avec pleins de valeurs en dur, bien comme il le faut 🤡) :
+Mon blog est versionné sur _GitHub_, je suis donc parti sur la solution suivante :
 
-```dockerfile
+- Faire des **fetchs** périodique sur le repository (~ 30 minutes)
+- Lorsque des changements sont détectés, faire un **pull** du repository pour mettre à jour la branche locale
+- Lancer un build pour générer la nouvelle version du site
+- Copier le site généré dans le dossier _public_ (== déploiement)
+
+Ces opérations sont faites via un script écrit en _Kotlin_. Ce script est ensuite [dockérizé](https://github.com/remylavergne/remylavergne.dev/blob/master/Dockerfile) dans une image qui contient tous les outils pour faire ces opérations (git, Hugo, Kotlin, ...).
+
+### Dockerfile
+
+```text
 FROM openjdk:17-jdk-alpine3.13
 
 LABEL maintainer="contact@remylavergne.dev"
@@ -57,7 +64,7 @@ ENV PATH=/root/.sdkman/candidates/kotlin/current/bin:$PATH
 ENTRYPOINT ["kotlin", "update.main.kts"]
 ```
 
-Ce *Dockerfile* utilise un [script](https://github.com/remylavergne/remylavergne.dev/blob/master/update.main.kts) écrit en *Kotlin* :
+### Le script Kotlin
 
 ```kotlin
 #!/usr/bin/env kotlin
@@ -70,13 +77,23 @@ import java.io.File
 val targetDirectory: File = File("public")
 val tempDir: File = File("temp")
 
-fun String.execute() {
+fun String.execute(): String {
     val command = this.split(" ")
+    val output = File("output.txt")
+    output.createNewFile()
+
     ProcessBuilder()
         .command(command)
-        .inheritIO()
+        .redirectErrorStream(true)
+        .redirectOutput(output)
         .start()
         .waitFor()
+
+    val o = output.readText()
+    println(o)
+    output.deleteOnExit()
+
+    return o
 }
 
 suspend fun scheduleRepeatedly(delayTimeMillis: Long = 30 * 60_000, action: suspend CoroutineScope.() -> Unit) =
@@ -97,11 +114,9 @@ fun cloneProject() {
 }
 
 fun fetchRepo(): Boolean {
-    val output = File("output.txt").apply { createNewFile() }
-    "git -C temp fetch".execute()
+    val output: String = "git -C temp fetch".execute()
 
-    val dataAvailable = output.readText().isNotEmpty()
-    output.deleteOnExit()
+    val dataAvailable = output.isNotEmpty()
 
     return dataAvailable
 }
@@ -144,7 +159,10 @@ runBlocking {
 }
 ```
 
-Le tout est assemblé dans un *docker-compose* :
+### Le Docker Compose
+
+Deux services se partagent le même dossier `public`. C'est ce dossier qui expose publiquement le blog via l'adresse <https://remylavergne.dev>.
+Le service `web` expose le blog, tandis que le service `auto-update` s'occupe de build la dernière version disponible du blog.
 
 ```yaml
 version: "3.8"
@@ -184,7 +202,9 @@ networks:
       name: nginx-proxy
 ```
 
-Pendant la création du Dockerfile j'ai rencontré quelques difficultés causées par l'utilisation de la version *Alpine* de l'[OpenJDK](https://hub.docker.com/_/openjdk/). Cette version allégée manque de pas mal de dépendances...
+## Problématiques rencontrées
+
+Pendant la création du _Dockerfile_ j'ai rencontré quelques difficultés causées par l'utilisation de la version _Alpine_ de l'[OpenJDK](https://hub.docker.com/_/openjdk/). Cette version allégée manque de pas mal de dépendances, et moi de connaissances...
 
 Après l'installation de **Go Hugo**, je faisais un check de sa version pour vérifier que tout était en ordre avec un simple `hugo version`, mais cette erreur s'affichait à chaque fois :
 
@@ -192,8 +212,10 @@ Après l'installation de **Go Hugo**, je faisais un check de sa version pour vé
 error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
 ```
 
-Après quelques recherches, il s'est avéré qu'il me manquait ces deux dépendances : `alpine-sdk libc6-compat`.
+Après quelques longues recherches, il s'est avéré qu'il me manquait ces deux dépendances : `alpine-sdk libc6-compat`.
 
 ## Pistes d'améliorations
 
-L'image *Alpine* pèse ~ 180Mo maximum, mais après la génération de l'image, celle-ci pèse aux alentours de 750Mo ! Je vais essayer de comprendre ce que peux autant gonfler sa taille. Et voir si je ne peux pas nettoyer certaines dépendances.
+- L'image _Alpine_ pèse ~ 180Mo maximum, mais après la génération de l'image, celle-ci pèse aux alentours de 750Mo ! Je vais essayer de comprendre ce que peux autant gonfler sa taille. Et voir si je ne peux pas nettoyer certaines dépendances.
+- En l'état actuel, le mécanisme est très basique car n'importe quelle différence sur le repository aura pour effet de lancer une nouveau build + déploiement du blog (par exemple: si le *README.md* est édité, le site sera redéployé).
+  Ceci n'est pas forcément bloquant / contraignant.
