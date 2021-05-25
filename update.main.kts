@@ -8,13 +8,23 @@ import java.io.File
 val targetDirectory: File = File("public")
 val tempDir: File = File("temp")
 
-fun String.execute() {
+fun String.execute(): String {
     val command = this.split(" ")
+    val output = File("output.txt") 
+    output.createNewFile()
+
     ProcessBuilder()
         .command(command)
-        .inheritIO()
+        .redirectErrorStream(true)
+        .redirectOutput(output)
         .start()
         .waitFor()
+
+    val o = output.readText()
+    println(o)
+    output.deleteOnExit()
+
+    return o
 }
 
 suspend fun scheduleRepeatedly(delayTimeMillis: Long = 30 * 60_000, action: suspend CoroutineScope.() -> Unit) =
@@ -35,12 +45,10 @@ fun cloneProject() {
 }
 
 fun fetchRepo(): Boolean {
-    val output = File("output.txt").apply { createNewFile() }
-    "git -C temp fetch".execute()
+    val output: String = "git -C temp fetch".execute()
 
-    val dataAvailable = output.readText().isNotEmpty()
-    output.deleteOnExit()
-
+    val dataAvailable = output.isNotEmpty()
+       
     return dataAvailable
 }
 
