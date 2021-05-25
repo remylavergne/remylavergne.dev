@@ -31,7 +31,7 @@ fun projectNotCloned(): Boolean {
 
 fun cloneProject() {
     tempDir.mkdir()
-    "git clone https://github.com/remylavergne/remylavergne.dev.git temp".execute()
+    "git clone --recurse-submodules https://github.com/remylavergne/remylavergne.dev.git temp".execute()
 }
 
 fun fetchRepo(): Boolean {
@@ -46,6 +46,7 @@ fun fetchRepo(): Boolean {
 
 fun pullLatestVersion() {
     "git -C temp pull".execute()
+    "git submodule update --recursive --remote".execute()
 }
 
 fun buildLatestVersion() {
