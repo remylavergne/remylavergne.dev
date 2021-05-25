@@ -183,3 +183,17 @@ networks:
     external:
       name: nginx-proxy
 ```
+
+Pendant la création du Dockerfile j'ai rencontré quelques difficultés causées par l'utilisation de la version *Alpine* de l'[OpenJDK](https://hub.docker.com/_/openjdk/). Cette version allégée manque de pas mal de dépendances...
+
+Après l'installation de **Go Hugo**, je faisais un check de sa version pour vérifier que tout était en ordre avec un simple `hugo version`, mais cette erreur s'affichait à chaque fois :
+
+```shell
+error while loading shared libraries: libstdc++.so.6: cannot open shared object file: No such file or directory
+```
+
+Après quelques recherches, il s'est avéré qu'il me manquait ces deux dépendances : `alpine-sdk libc6-compat`.
+
+## Pistes d'améliorations
+
+L'image *Alpine* pèse ~ 180Mo maximum, mais après la génération de l'image, celle-ci pèse aux alentours de 750Mo ! Je vais essayer de comprendre ce que peux autant gonfler sa taille. Et voir si je ne peux pas nettoyer certaines dépendances.
