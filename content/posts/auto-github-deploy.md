@@ -1,5 +1,5 @@
 ---
-title: Auto Deploy Test
+title: Go Hugo. GitHub, déploiement automatique.
 date: 2021-05-25T19:33:59+02:00
 lastmod: 2021-05-25T19:33:59+02:00
 author: Rémy Lavergne
