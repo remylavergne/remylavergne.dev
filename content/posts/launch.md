@@ -9,7 +9,7 @@ cover: /post-headers/first.jpg
 categories:
   - Random
 tags:
-  - Random
+  - random
 # nolastmod: true
 draft: false
 ---
