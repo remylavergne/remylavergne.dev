@@ -23,7 +23,7 @@ Explication de comment j'ai automatisé la mise à jour de mon blog avec **GitHu
 
 ## Contexte et cas d'usage
 
-Ce blog est hébergé sur [GitHub](https://github.com/remylavergne/remylavergne.dev), et je voulais trouver une moyen simple de pouvoir automatiser sa mise à jour, sans devoir passer par mon ftp pour upload moi-même les fichiers générés par _Hugo_. Ce process est long, et pas fun du tout.
+Ce blog est versionné sur [GitHub](https://github.com/remylavergne/remylavergne.dev), et je voulais trouver une moyen simple de pouvoir automatiser sa mise à jour, sans devoir passer par mon ftp pour upload moi-même les fichiers générés par _Hugo_. Ce process est long, et pas fun du tout.
 
 ## Processus
 
