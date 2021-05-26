@@ -2,28 +2,8 @@ My [blog](https://remylavergne.dev/) based on [Go Hugo Framework](https://gohugo
 
 Custom made to auto-build / auto-deploy it with Docker from GitHub.
 
----
-title: Auto Deploy Test
-date: 2021-05-25T19:33:59+02:00
-lastmod: 2021-05-25T19:33:59+02:00
-author: Rémy Lavergne
-avatar: /me/mugshot.jpg
-# authorlink: https://author.site
-cover: /post-headers/auto-github-deploy.jpg
-categories:
-  - Dev
-tags:
-  - docker
-  - github
-  - kotlin
-  - automation
-# nolastmod: true
-draft: false
----
 
 Explication de comment j'ai automatisé la mise à jour de mon blog avec **GitHub**, **Docker** et **Kotlin**.
-
-<!--more-->
 
 ## Contexte et cas d'usage
 
