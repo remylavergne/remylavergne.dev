@@ -27,8 +27,6 @@ Ce blog est versionné sur [GitHub](https://github.com/remylavergne/remylavergne
 
 ## Processus
 
-Mon blog est versionné sur _GitHub_, je suis donc parti sur la solution suivante :
-
 - Faire des **fetchs** périodique sur le repository (~ 30 minutes)
 - Lorsque des changements sont détectés, faire un **pull** du repository pour mettre à jour la branche locale
 - Lancer un build pour générer la nouvelle version du site
