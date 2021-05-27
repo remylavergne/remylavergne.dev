@@ -54,7 +54,7 @@ fun fetchRepo(): Boolean {
 
 fun pullLatestVersion() {
     "git -C temp pull".execute()
-    "git submodule update --recursive --remote".execute()
+    "git -C temp submodule update --recursive --remote".execute()
 }
 
 fun buildLatestVersion() {
