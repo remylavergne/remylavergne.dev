@@ -70,3 +70,5 @@ Sources:
 
 - <https://stackoverflow.com/questions/33308482/git-how-configure-kdiff3-as-merge-tool-and-diff-tool>
 - <https://stackoverflow.com/questions/33722301/how-to-setup-kdiff3-in-mac-os>
+- <https://coderwall.com/p/gc_hqw/use-intellij-or-webstorm-as-your-git-diff-tool-even-on-windows>
+- <https://www.kimsereylam.com/git/vscode/2020/12/25/git-difftool-and-mergetool-with-visual-studio-code.html>
